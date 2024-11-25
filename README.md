@@ -88,4 +88,4 @@ Limitations and todos for the application due to time constraints
 1. Logout api is not created due to which we don't destroy session on backend.
 2. The reason for maintaining session is that when we get a jwt token to validate, in addition to checking its signature we also need to check if its a valid token via db. This is because in a scenario, we logout the user, the jwt in theory will be active till its ttl, which can be misused, thus we need to check in db as well. Optimizations would include checking before ttl and keeping ttl in db to remove expired tokens.
 3. Code coverage can be improve only basic tests are considered.
-4. Salt for hashing the passwords can be implemented, currently we only have length
+4. Salt for hashing the passwords can be implemented, currently we only have length based one-way hash
