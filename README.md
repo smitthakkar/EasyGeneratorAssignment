@@ -67,13 +67,15 @@ For state management we have used [Zustand](https://github.com/pmndrs/zustand) a
 
 ### Signup
 
-![alt text](/docs/images/signup.png)
+![Signup](/docs/images/image.png)
 
 ### Signin
 ![Signin](/docs/images/login.png)
 
+
 ### Logout
 ![Logout](/docs/images/logout.png)
+
 
 ## Frontend Considerations
 1. We have created only 2 pages one for auth and one for index
