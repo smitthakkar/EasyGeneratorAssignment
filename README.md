@@ -65,11 +65,11 @@ Frontend is built in react and vite and nextui. The boilerplate has been obtaine
 
 For state management we have used [Zustand](https://github.com/pmndrs/zustand) as its a lightweight library for state management.
 
-### Signup
+### Sign Up
 
 ![Signup](/docs/images/signup.png)
 
-### Signin
+### Log In
 ![Signin](/docs/images/login.png)
 
 
