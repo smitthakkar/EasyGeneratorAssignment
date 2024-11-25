@@ -16,9 +16,9 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async signup(username: string, name: string, password: string): Promise<SignupResponseDto> {
+  async signup(email: string, name: string, password: string): Promise<SignupResponseDto> {
     // Check if the user already exists
-    const userExists = await this.userModel.findOne({ username });
+    const userExists = await this.userModel.findOne({ email});
     if (userExists) {
       Logger.log("User doesn't exist");
       throw new HttpException('User already exists', HttpStatus.CONFLICT);
@@ -28,17 +28,17 @@ export class AuthService {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     // Create and save the user
-    const newUser = new this.userModel({ username, name, password: hashedPassword });
+    const newUser = new this.userModel({ email, name, password: hashedPassword });
     await newUser.save();
     Logger.log("User saved successfully");
     // Return a JWT token
-    const payload = { username: newUser.username, name: newUser.name };
+    const payload = { email: newUser.email, name: newUser.name };
     return payload;
   }
 
-  async signin(username: string, password: string): Promise<SigninResponseDto> {
+  async signin(email: string, password: string): Promise<SigninResponseDto> {
     // Find user by email
-    const user = await this.userModel.findOne({ username });
+    const user = await this.userModel.findOne({ email });
     Logger.log('Found user', !!user);
     if (!user) {
       Logger.error('Failed to find user');
@@ -53,10 +53,10 @@ export class AuthService {
     }
 
     // Return JWT token
-    const payload = { username: user.username, name: user.name };
+    const payload = { email: user.email, name: user.name };
     const token = this.jwtService.sign(payload);
     Logger.log("Token created successfully");
-    const newSession = new this.userSessionModel({username, token});
+    const newSession = new this.userSessionModel({email, token});
     await newSession.save();
     return { token };
   }

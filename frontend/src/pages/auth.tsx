@@ -22,6 +22,8 @@ export default function AuthPage() {
     const { isLoggedIn, setIsLoggedIn } = useUserStore();
     const navigate = useNavigate();
 
+    const validateEmail = (value: string) => value.match(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+.[A-Z]{2,4}$/i);
+
 
     useEffect(()=>{
         if(isLoggedIn){
@@ -31,17 +33,23 @@ export default function AuthPage() {
 
     const toggleVisibility = () => setIsVisible(!isVisible);
     const [formData, setFormData] = React.useState({
-        username: "",
+        email: "",
         password: "",
         name: "",
     });
     const [errors, setErrors] = React.useState({
-        username: "",
+        email: "",
         password: "",
         name: "",
     });
     const [generalError, setGeneralError] = React.useState("");
     const [loading, setLoading] = React.useState(false);
+
+    const isInvalidEmail = React.useMemo(() => {
+        if (formData?.email === "") return false;
+
+        return validateEmail(formData?.email) ? false : true;
+    }, [formData?.email]);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -51,11 +59,11 @@ export default function AuthPage() {
     const toggleTab = (key: string) =>{
         setSelected(key);
         setGeneralError("");
-        setErrors({ username: "", password: "", name: "" });
+        setErrors({ email: "", password: "", name: "" });
     }
     const handleSubmit = async (type: "login" | "sign-up") => {
         setLoading(true);
-        setErrors({ username: "", password: "", name: "" });
+        setErrors({ email: "", password: "", name: "" });
         setGeneralError("");
 
         const url =
@@ -66,11 +74,11 @@ export default function AuthPage() {
         const body =
             type === "login"
                 ? {
-                    username: formData.username,
+                    email: formData.email,
                     password: formData.password,
                 }
                 : {
-                    username: formData.username,
+                    email: formData.email,
                     name: formData.name,
                     password: formData.password,
                 };
@@ -89,10 +97,10 @@ export default function AuthPage() {
                 console.error("Error Response:", errorData);
 
 
-                const newErrors: any = { username: "", password: "", name: "" };
+                const newErrors: any = { email: "", password: "", name: "" };
                 if (Array.isArray(errorData.message)) {
                     errorData.message.forEach((msg: string) => {
-                        if (msg.toLowerCase().includes("username")) newErrors.username = msg;
+                        if (msg.toLowerCase().includes("email")) newErrors.email = msg;
                         if (msg.toLowerCase().includes("password")) newErrors.password = msg;
                         if (msg.toLowerCase().includes("name")) newErrors.name = msg;
                     });
@@ -109,7 +117,7 @@ export default function AuthPage() {
                 navigate("/");
             }
 
-            setFormData({ username: "", password: "", name: "" });
+            setFormData({ email: "", password: "", name: "" });
             setSelected("login");
         } catch (error: any) {
             if (!generalError) {
@@ -146,12 +154,14 @@ export default function AuthPage() {
                                         >
                                             <Input
                                                 isRequired
-                                                name="username"
-                                                value={formData.username}
+                                                name="email"
+                                                type="email"
+                                                value={formData.email}
                                                 onChange={handleInputChange}
-                                                label="Username"
-                                                placeholder="Enter your username"
-                                                errorMessage={!!errors.username}
+                                                label="Email"
+                                                placeholder="Enter your Email"
+                                                errorMessage={errors.email}
+                                                isInvalid={isInvalidEmail}
                                             />
                                             <Input
                                                 isRequired
@@ -170,7 +180,8 @@ export default function AuthPage() {
                                                     </button>
                                                 }
                                                 type={isVisible ? "text" : "password"}
-                                                errorMessage={!!errors.password}
+                                                errorMessage={errors.password}
+                                                isInvalid={!!errors.password}
                                             />
                                             {generalError && (
                                                 <p className="text-red-500 text-center text-sm">{generalError}</p>
@@ -205,16 +216,19 @@ export default function AuthPage() {
                                                 onChange={handleInputChange}
                                                 label="Name"
                                                 placeholder="Enter your name"
-                                                errorMessage={!!errors.name}
+                                                errorMessage={errors.name}
+                                                isInvalid={!!errors.name}
                                             />
                                             <Input
                                                 isRequired
-                                                name="username"
-                                                value={formData.username}
+                                                name="email"
+                                                type="email"
+                                                value={formData.email}
                                                 onChange={handleInputChange}
-                                                label="Username"
-                                                placeholder="Enter your username"
-                                                errorMessage={!!errors.username}
+                                                label="Email"
+                                                placeholder="Enter your email"
+                                                errorMessage={errors.email}
+                                                isInvalid={isInvalidEmail}
                                             />
                                             <Input
                                                 isRequired
@@ -233,7 +247,8 @@ export default function AuthPage() {
                                                     </button>
                                                 }
                                                 type={isVisible ? "text" : "password"}
-                                                errorMessage={!!errors.password}
+                                                errorMessage={errors.password}
+                                                isInvalid={!!errors.password}
                                             />
                                             {generalError && (
                                                 <p className="text-red-500 text-center text-sm">{generalError}</p>

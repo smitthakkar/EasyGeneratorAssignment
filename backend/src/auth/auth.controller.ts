@@ -19,7 +19,7 @@ export class AuthController {
   @ApiResponse({ status: 409, description: 'User already exists' })
   async signup(@Body() authDto: AuthDto) : Promise<SignupResponseDto>{
     Logger.log(`Starting request for signup`);
-    return this.authService.signup(authDto.username, authDto.name, authDto.password);
+    return this.authService.signup(authDto.email, authDto.name, authDto.password);
   }
 
   @Post('signin')
@@ -30,6 +30,6 @@ export class AuthController {
   @ApiResponse({ status: 401, description: 'Invalid credentials' })
   async signin(@Body() signinDto: SigninDto): Promise<SigninResponseDto> {
     Logger.log(`Starting request for signin`);
-    return this.authService.signin(signinDto.username, signinDto.password);
+    return this.authService.signin(signinDto.email, signinDto.password);
   }
 }

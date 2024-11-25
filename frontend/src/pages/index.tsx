@@ -32,7 +32,8 @@ return (
           Logout
         </Button>
         <div className="inline-block text-center justify-center">
-          <span className={title()}>Welcome to&nbsp;</span>
+          <span className={title()}>Welcome to the application.&nbsp;</span>
+          <br/>
           <span className={title({ color: "violet" })}>Easy Generator&nbsp;</span>
           <br />
           <div className={subtitle({ class: "mt-4" })}>
