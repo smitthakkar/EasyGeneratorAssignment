@@ -46,16 +46,15 @@ password|	String	|Hashed password for the user.	|Required
 | expireAfterSeconds | Integer | Time-to-live (TTL) index on updatedAt for automatic expiration. | Expires 1 hour after updatedAt  |
 
 
-## Considerations
+### Database Considerations
 1. Unique index to disallow duplicates
 2. Session table incase we want to have multi device login, we can manage sessions to renew etc seperately.
 3. TTL ensures that session information i.e. token is deleted once used
 
 
 ---
-### Considerations
 
-Backend
+## Backend Considerations
 1. Input validation is added to minimize errors
 2. Nestjs Rate limiting is being used to enable ratelimiting for apis. Currently, its in memory, but we have the provision to plugin a persistence strategy for it.
 3. Logging has been implemented to track activity
@@ -76,6 +75,12 @@ For state management we have used [Zustand](https://github.com/pmndrs/zustand) a
 ### Logout
 ![Logout](/docs/images/logout.png)
 
+## Frontend Considerations
+1. We have created only 2 pages one for auth and one for index
+2. By default if user is not loggedin they will be redirected to auth screen to signin/signup
+3. If user is logged in then they won't be directed to sigin/signup directly to home page
+4. Once logged in state is maintained to reuse in application
+
 # How to run
 
 The application is dockerized, simply clone and run the following command in root
@@ -83,9 +88,12 @@ The application is dockerized, simply clone and run the following command in roo
 ```
 docker-compose up --build
 ```
+---
 
-Limitations and todos for the application due to time constraints
+## Limitations and todos
+Due to time constraints we have some limitations for the application
 1. Logout api is not created due to which we don't destroy session on backend.
 2. The reason for maintaining session is that when we get a jwt token to validate, in addition to checking its signature we also need to check if its a valid token via db. This is because in a scenario, we logout the user, the jwt in theory will be active till its ttl, which can be misused, thus we need to check in db as well. Optimizations would include checking before ttl and keeping ttl in db to remove expired tokens.
 3. Code coverage can be improve only basic tests are considered.
 4. Salt for hashing the passwords can be implemented, currently we only have length based one-way hash
+5. urc based logs, currently we are having basic logs, we can enhance to improve logs by passing unique reference code from request header
