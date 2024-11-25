@@ -67,7 +67,7 @@ For state management we have used [Zustand](https://github.com/pmndrs/zustand) a
 
 ### Signup
 
-![Signup](/docs/images/image.png)
+![Signup](/docs/images/signup.png)
 
 ### Signin
 ![Signin](/docs/images/login.png)
