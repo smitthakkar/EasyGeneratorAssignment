@@ -1,0 +1,28 @@
+version: '3.9'
+
+services:
+  frontend:
+    build:
+      context: ./frontend
+    ports:
+      - "3000:80" # Map the host's port 3000 to the container's port 3000
+    environment:
+      REACT_APP_BACKEND_URL: http://backend:3001 # Provide the backend URL for the frontend
+
+  backend:
+    build:
+      context: ./backend
+    ports:
+      - "3001:3001" # Map the host's port 3001 to the container's port 3000
+    environment:
+      DATABASE_URI: mongodb://admin:password@mongodb:27017/app?authSource=admin
+      JWT_SECRET: 91014d7df9ac86a86b5fca0dbc226ef4cd9704a48dcdf48992f80f5b5aec9d4c5aec4e353f8380c22a6a8958b43e4629c74e698beab8c202498e6b9eb6ad47c5
+
+  mongodb:
+    image: mongo:5.0
+    container_name: mongodb
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password
+    ports:
+      - "27017:27017" # Expose MongoDB port for local access if needed
